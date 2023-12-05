@@ -78,8 +78,9 @@ export const userHandler = {
     });
 
     setCookie("auth", await jwt.sign(login), {
+      HttpOnly: true,
       maxAge: 4 * 86400,
-      sameSite: "lax",
+      sameSite: "None",
       path: "/"
     });
 
