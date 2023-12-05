@@ -3,7 +3,6 @@ import { authMiddleware } from "../middleware/authMiddleware";
 
 export function configureUserRoutes(app) {
   return app
-    .get("/", userHandler.getUsers)
     .guard({ body: userHandler.validateCreateUser }, (guardApp) =>
       guardApp.post("/", userHandler.createUser)
     )
