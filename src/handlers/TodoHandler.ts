@@ -3,11 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import { todoService } from "../services/TodoService";
 
 export const todoHandler = {
-  getTodos: async ({ jwt, cookie: { auth }, bearer }) => {
-    // console.log(auth + " " + bearer);
-    const { id: userId } = auth
-      ? await jwt.verify(auth)
-      : await jwt.verify(bearer);
+  getTodos: async ({ jwt, bearer }) => {
+    const { id: userId } = await jwt.verify(bearer);
     const todos = await todoService.getTodos(userId);
 
     return {
@@ -16,8 +13,8 @@ export const todoHandler = {
     };
   },
 
-  createTodo: async ({ jwt, body, set, cookie: { auth } }) => {
-    const { id: userId } = await jwt.verify(auth);
+  createTodo: async ({ jwt, body, set, bearer }) => {
+    const { id: userId } = await jwt.verify(bearer);
 
     const id = uuidv4();
     const note = await todoService.createTodo({
@@ -35,8 +32,8 @@ export const todoHandler = {
     };
   },
 
-  updateTodo: async ({ jwt, body, set, cookie: { auth }, params: { id } }) => {
-    const { id: userId } = await jwt.verify(auth);
+  updateTodo: async ({ jwt, bearer, body, set, params: { id } }) => {
+    const { id: userId } = await jwt.verify(bearer);
     await todoService.verifyTodoAccess(id, userId);
 
     await todoService.updateTodo({
@@ -50,8 +47,8 @@ export const todoHandler = {
     };
   },
 
-  getTodoById: async ({ jwt, set, cookie: { auth }, params: { id } }) => {
-    const { id: userId } = await jwt.verify(auth);
+  getTodoById: async ({ jwt, bearer, set, params: { id } }) => {
+    const { id: userId } = await jwt.verify(bearer);
     await todoService.verifyTodoAccess(id, userId);
 
     const todo = await todoService.getTodoById(id);
@@ -63,8 +60,8 @@ export const todoHandler = {
     };
   },
 
-  deleteTodo: async ({ jwt, set, cookie: { auth }, params: { id } }) => {
-    const { id: userId } = await jwt.verify(auth);
+  deleteTodo: async ({ jwt, set, bearer, params: { id } }) => {
+    const { id: userId } = await jwt.verify(bearer);
     await todoService.verifyTodoAccess(id, userId);
     await todoService.deleteTodo(id);
     set.status = 200;

@@ -76,17 +76,17 @@ export const userHandler = {
       password: hashedPassword
     });
 
-    setCookie("auth", await jwt.sign(login), {
+    const token = await jwt.sign(login)
+    setCookie("auth", token, {
       maxAge: 4 * 86400,
       sameSite: "None",
-      secure: true,
-      path: "/"
     });
 
     set.status = 200;
     return {
       status: "success",
-      message: `Signed in successfully!`
+      message: `Signed in successfully!`,
+      token: token
     };
   },
 

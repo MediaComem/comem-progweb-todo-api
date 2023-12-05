@@ -1,5 +1,5 @@
-export const authMiddleware = async ({ bearer, set, cookie: { auth }, jwt }) => {
-    if (!bearer && !auth) {
+export const authMiddleware = async ({ bearer, set, jwt }) => {
+    if (!bearer) {
         set.status = 401
         set.headers[
             'WWW-Authenticate'
@@ -11,7 +11,8 @@ export const authMiddleware = async ({ bearer, set, cookie: { auth }, jwt }) => 
         }
     }
 
-    const profile = await jwt.verify(auth);
+    const profile = await jwt.verify(bearer);
+
     if (!profile) {
         set.status = 401
         set.headers[
