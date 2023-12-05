@@ -41,3 +41,7 @@ yarn-error.log*
 package-lock.json
 **/*.bun
 
+#sqlite
+prisma/migrations
+**/*.db
+**/*.db-journal

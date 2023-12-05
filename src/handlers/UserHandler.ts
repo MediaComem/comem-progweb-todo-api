@@ -16,7 +16,6 @@ export const userHandler = {
 
     const id = uuidv4();
 
-    
     const passwordHash = await Bun.password.hash(body.password, {
       algorithm: "bcrypt",
       cost: parseInt(process.env.BUN_COST)
@@ -78,9 +77,9 @@ export const userHandler = {
     });
 
     setCookie("auth", await jwt.sign(login), {
-      HttpOnly: true,
       maxAge: 4 * 86400,
       sameSite: "None",
+      secure: true,
       path: "/"
     });
 
@@ -92,7 +91,7 @@ export const userHandler = {
   },
 
   validateCreateUser: t.Object({
-    email: t.String({ format: 'email' }),
+    email: t.String({ format: "email" }),
     password: t.String({ minLength: 6 })
   })
 };
